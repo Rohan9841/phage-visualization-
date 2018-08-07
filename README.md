@@ -14,7 +14,7 @@ This tool will help the researchers find cure for tuberculosis.
     
 3.  Open XAMPP and start Apache and MySQL
 
-4. Open and browser and put the following address:
+4. Open any browser and put the following address:
     http://localhost/dashboard/hello/Almost%20done.php
     
 #Built with:
