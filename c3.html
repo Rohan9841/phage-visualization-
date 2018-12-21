@@ -1,0 +1,121 @@
+<html>
+    <head>
+        <title>Practice</title>
+
+        <script src = "d3.min.js"></script>
+        
+        <script src="jquery.js"></script>
+        <script src = "jquery-ui/jquery-ui.js"></script>
+        <link rel = "stylesheet" href = "jquery-ui/jquery-ui.css">
+
+        <style type = "text/css">
+            svg{
+                position: relative;
+                border: 1px black solid;
+            }
+
+            .cir:hover{
+                fill: red;
+                box-shadow: 0px 0px 0px 10px black;
+            }
+            
+            .cir {
+                border: solid 5px #FC5185;
+            }
+
+            .lineCut:hover{
+                stroke: red;
+            }
+            
+        </style>
+    </head>
+
+    <body>    
+        
+        <svg id = "svg"></svg>
+
+        <script type = "text/javaScript">
+            var dataset = [20,21,22,23,40,60,80,100,488,1023];
+            
+            //declare svgWidth
+            var svgWidth = $(window).width();
+            var svgHeight = 100;
+            
+            //padding to add  axis 
+            var padding = 20;
+
+            //radius of circle
+            var radius = (0.4/100) * svgWidth;
+
+            //declare properties of svg
+            var svg = d3.select("svg")
+                .attr("width",svgWidth)
+                .attr("height",svgHeight)
+                .call(d3.zoom()
+                .extent([[padding, 0], [svgWidth-padding, 0]])
+                .scaleExtent([1, 100])
+                .translateExtent([[padding,0], [svgWidth-padding, 0]])
+                .on("zoom",zoomed));
+
+            //scaling the domain and range 
+            var xScale = d3.scaleLinear()
+                .domain([0,d3.max(dataset)])
+                .range([padding, svgWidth-padding]); 
+            
+            //creating x-axis
+            var x_axis = d3.axisBottom(xScale);
+            
+            //position of the x-axis in height
+            var xAxisTranslate = svgHeight/2;
+            
+            //calling x-axix        
+            var gX = svg.append("g")
+                    .attr("transform","translate(0,"+xAxisTranslate+")")
+                    .call(x_axis);
+     
+                //Add circle to the line
+            var circ = svg.selectAll("circle")
+                .data(dataset)
+                .enter()
+                .append("circle")
+                .attr("class","cir")
+                .attr("cx",function(d){return (xScale(d));})
+                .attr("cy",xAxisTranslate)
+                .attr("r",radius)
+                .attr("fill","purple")
+                 .on("mouseover",function(d){
+                     d3.select(this)
+                         .transition()
+                         .duration(50)
+                         .style("cursor","pointer")
+                         .attr("r",radius/0.95)
+                 })
+                
+                 .on("mouseout",function(d){
+                     d3.select(this)
+                         .transition()
+                         .duration(50)
+                         .style("cursor","normal")
+                         .attr("r",radius)
+                 })
+                 .append("title")
+                 .text((d)=>d)
+                 .text();
+
+                
+                 function zoomed(){
+                     //create new scale objects based on event
+                     var new_xScale = d3.event.transform.rescaleX(xScale);
+
+                     //update axes
+                     gX.call(x_axis.scale(new_xScale));
+                     svg.selectAll("circle").data(dataset)
+                        .attr('cx',function(d){return new_xScale(d)})
+                        .attr('cy',xAxisTranslate);
+                 }
+
+        </script>
+    </body>
+
+</html>
+

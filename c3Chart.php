@@ -9,16 +9,18 @@ $link = mysqli_connect("localhost","Rohan","","phage");
 
 	$result = mysqli_query($link,$query);
 	
+	$a = mysqli_fetch_all($result);
+	
 	//empty array
-	$a = array();
+	//$a = array();
 
-	while ($row = mysqli_fetch_array($result))
-	{
-		//pushing cutpoints everytime we find one
-		array_push($a,$row[0]);
-		
-	}
-	//sending the array $a as json encode
+//	while ($row = mysqli_fetch_array($result))
+//	{
+//		//pushing cutpoints everytime we find one
+//		array_push($a,$row[0]);
+//		
+//	}
+//	//sending the array $a as json encode
 	echo json_encode($a);
 }
 
@@ -49,8 +51,7 @@ function basePair($varPhage)
             #contentBox{
 
                 background-color:bisque;
-                width:1325px;
-                margin: 0 auto;
+                
 				
 
             }
@@ -91,12 +92,16 @@ function basePair($varPhage)
 			
 			
 
-            #myCanvas
+            #chart
             {
 
-                border: 1px solid black;
+              position: relative;
+				right: 25px;	
+				
 
             }
+			
+			
 
         </style>
 		
@@ -104,11 +109,12 @@ function basePair($varPhage)
         <script src="jquery.js"></script>
         <script src = "jquery-ui/jquery-ui.js"></script>
         <link rel = "stylesheet" href = "jquery-ui/jquery-ui.css">
+	
 		
 		<!-- adding c3 and d3 for chart -->
 		
 		<link href="c3-0.6.7/c3.css" rel="stylesheet">
-		<script src="d3.v5.min.js" charset="utf-8"></script>
+		<script src="d3.min.js" charset="utf-8"></script>
 		<script src="c3-0.6.7/c3.min.js"></script>
 
 
@@ -123,7 +129,7 @@ function basePair($varPhage)
                 <ul>
 
                     <li><a href = "#searchCriteria">Search Criteria</a></li>
-                    <li><a href = "#myCanvas">Visualization</a></li>
+                    <li><a href = "#chart">Visualization</a></li>
 
                 </ul>
 				
@@ -389,41 +395,19 @@ function basePair($varPhage)
 						
 					</div>
 				
-<!--				Creating canvas to draw the picture-->
+				<div id = "chart"></div>
 				
-				<canvas id = "myCanvas" height = 800 width = 1270></canvas>
-
        		</div>
-			
 			
 			
 			<Script type = "text/javascript">
 				
 //				Making the tab div a real tab using jquery UI
                 $("#tab").tabs();
-				
-//				getting the canvas and storing in the variable canvas
-                var canvas = document.getElementById("myCanvas");
-				
-//				making canvas a 2d interface and storing in the variable context
-                var context = canvas.getContext("2d");
-                context.lineWidth = 0.5;
-				
-//				making the lineposition the mid point of the canvas
-                var linePosition = (canvas.height)/2;
-				
-//				setting the start and end of canvas
-                var startLine = (6.25/100)*canvas.width;
-                var endLine = (93.75/100)*canvas.width;
-				
-//				setting the angle and radius of a circle
-                var circleRadius = (0.15/100)*canvas.width;
-                var circleAngle = 2*Math.PI;
-             	
-//				setting the position of the text in the canvas
-                var textLine = linePosition+100;
-
-                var realPos = 0;				
+				$("#tab").width($(window).width());
+				$(window).resize(function(){
+					$("#tab").width($(window).width());
+				})
 				
 //				When submit button is pressed the $varPhage and $varEnzyme becomes global variable
 				<?php if(isset($_POST['submit'])){?>
@@ -433,14 +417,24 @@ function basePair($varPhage)
                     ?>
 					
 //					We call the function but the value is object type so we convert it into the array type using $.map
-					var posOfCuts = $.map(<?php cutPoints($varPhage,$varEnzyme);?>, function(value, index) {
-    					return [value];
-					});
+					var posOfCuts = $.map(
+						<?php 
+							cutPoints($varPhage,$varEnzyme);
+						?>, 
+						function(value, index) 
+						{
+    						return [value];
+						});
 					
 //					We call the function but the value is object type so we convert it into the array type using $.map
-					var basePair = $.map(<?php basepair($varPhage);?>, function(value) {
-    					return [value];
-					});
+					var basePair = $.map(
+						<?php 
+							basepair($varPhage);
+						?>, 
+						function(value) 
+						{
+    						return [value];
+						});
 				
 //					These are just for tracking and debugging purpose
 					console.log(posOfCuts);
@@ -448,45 +442,26 @@ function basePair($varPhage)
 					console.log(typeof posOfCuts);
 					console.log(typeof basePair[0]);
 					
-//					Writing '0' and basepair value in the canvas
-                    context.beginPath();
-                    context.fillStyle = "black";
-                    context.font = "15px Arial";
-                    context.fillText("0",startLine-8,textLine-85);
-                    context.fillText(basePair[0],endLine,textLine-85);
-                    context.stroke();
-                    context.closePath();
-					
-//					Drawing the line 
-                    context.beginPath();
-                    context.moveTo(startLine,linePosition);
-                    context.lineTo(endLine,linePosition);
-                    context.strokeStyle = "black";
-                    context.stroke();
-                    context.closePath();
-                    
-                  
-//					Creating red dots at the points where we get posOfCuts
-					for(var i = 0; i< posOfCuts.length; i++)
-					{
-						realPos = ((endLine-startLine)/basePair[0])*posOfCuts[i];
-
-						context.fillStyle = "crimson";
-						context.beginPath();
-						context.arc(startLine+realPos,linePosition,circleRadius,0,circleAngle);
-						context.closePath();
-						context.fill();
-					}
+				 $("#tab").tabs("option","active",$("#tab").tabs("option","active")+1);
 				
-//					Writing the text in canvas
-                    context.beginPath();
-                    context.fillStyle = "black";
-                    context.font = "20px Arial";
-                    context.fillText("<?php echo $_POST['formEnzyme'] ?>"  + " cuts " + "<?php echo $_POST['formPhage'] ?>" +" "+posOfCuts.length +" times.",startLine,textLine);
-                    context.stroke();
-                    context.closePath();
+				posOfCuts.unshift($('.enzymeList').val());
+				
+				console.log(posOfCuts);
+				  
+		var chart = c3.generate({
+					bindto: '#chart',
+					data:
+					{
+						columns:
+						[
+							posOfCuts,
+							['e7',17165,17245,32555,42360,60000],
+							['rex',21255,25555,52456,78585]
+						]
+					}
+				});
 
-                    $("#tab").tabs("option","active",$("#tab").tabs("option","active")+1)
+                   
 					<?php } ?>
 
             </Script>
@@ -496,7 +471,6 @@ function basePair($varPhage)
     </body>
 
 </html>
-
 
 
 
