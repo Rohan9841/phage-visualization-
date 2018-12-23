@@ -1,0 +1,102 @@
+<html>
+    <head>
+        <title>d3Html</title>
+        
+        <!--Getting all the required scripts-->
+        <script src = "ObjectSvg.js"></script>
+
+        <script src="jquery.js"></script>
+        <script src = "jquery-ui/jquery-ui.js"></script>
+        <link rel = "stylesheet" href = "jquery-ui/jquery-ui.css">
+
+        <script src = "d3.min.js"></script>
+
+        <!--Styling-->
+        <style type = "text/css">
+
+            #container{
+                background-color:none;
+                margin-right: 25px;
+                margin-left: 0px;
+            }
+
+            body{
+                background-color: none;
+            }
+            
+        </style>
+
+    </head>
+
+    <body>
+        <!--This is the svg where all our rects will be appended-->
+        <svg id = "container" class = "sort"></svg>
+
+        <div class = "sort">
+
+        </div>
+
+        <script>
+                           
+            $( function() {
+                $( ".sort" ).sortable({
+                placeholder: "ui-state-highlight"
+                });
+                $( ".sort" ).disableSelection();
+            } );
+
+            //Setting widht and height of our svg
+            $("#container").css("height",$(window).height());
+            $("#container").css("width",$(window).width());
+            
+            //Array for storing all our objects
+            var charts = [];
+            
+            //variable for storing the total number of rects needed
+            var i;
+
+            //looping through the number of i and creating new Chart object
+            for(i = 0; i<50; i++)
+            {
+                //storing all our object in chart array
+                 charts.push(new Chart({
+                //selecting svg as our element where we will append this object
+                element: document.querySelector('#container'),
+                //setting position of the object
+                pos: i * 120
+            }))
+            }
+        
+            //while window scrolls, 
+            $(window).scroll(function(){
+                    //storing our svg height
+                    var svgHeight = $("#container").height();
+
+                    //Until the svg heigh is less than the total height of our rects
+                    while(svgHeight < i * 120 )
+                    {
+                        //increase the height of svg
+                        svgHeight = svgHeight + (1/100)*svgHeight;
+                        $("#container").css("height",svgHeight);
+                    }
+                });
+
+            //if the window resizes
+            $(window).resize(function(){
+
+                //every time we resize, the value of j becomes i
+                var j = i;
+
+                //emptying the svg so that we can redraw the rectangle
+                $("#container").empty();
+                $("#container").css("width",$(window).width());
+
+                while(j>0)
+                {
+                    charts[j-1].drawRect();
+                    j = j-1;
+                }
+        })
+        </script>
+    </body>
+</html>
