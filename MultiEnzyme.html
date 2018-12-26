@@ -33,7 +33,7 @@
         } */
 
         #container {
-            background-color: bisque;
+            /* background-color: bisque; */
             margin-right: 25px;
             margin-left: 0px;
         }
@@ -42,9 +42,9 @@
             position: relative;
             border: 1px black solid;
             margin-bottom: 20px;
-            background-color: red;
+            /* background-color: red; */
         }
-
+        
         .cir:hover {
             fill: red;
             box-shadow: 0px 0px 0px 10px black;
@@ -54,11 +54,20 @@
             border: solid 5px #FC5185;
         }
 
+        .endLine:hover{
+            stroke: red;
+            cursor: pointer;
+        }
+
         .svgDiv {
-            background-color: blue;
+            /* background-color: blue; */
             padding-top: 10px;
             padding-bottom: 10px;
             margin-bottom: 20px;
+        }
+
+        .svgDiv:hover{
+            background-color: rgb(212, 202, 202);
         }
     </style>
 
@@ -88,7 +97,7 @@
                             <p>
                                 <label>Select which Phages you want to cut</label>
 
-                                <select id="framework" name="formPhage[]" multiple class="form-control" autofocus>
+                                <select id="formPhage" name="formPhage" single class="form-control" autofocus>
 
                                     <option value="Alatin">Alatin</option>
                                     <option value="Alpacados">Alpacados</option>
@@ -145,8 +154,10 @@
 
                             <p>
                                 <label>Select an enzyme</label>
+                            </p>
 
-                                <select id="framework" name="formEnzyme" single class="form-control" autofocus>
+                            <p>
+                                <select id="framework" name="formEnzyme[]" multiple class="form-control" autofocus>
 
                                     <option value="AatII">AatII</option>
                                     <option value="AbaSI">AbaSI</option>
@@ -339,7 +350,9 @@
                 </div>
 
             </div>
-            <div id="container"></div>
+            <div id="container">
+                <h1>Please Wait! You data is loading.</h1>
+            </div>
         </div>
         <script>
 
@@ -362,7 +375,7 @@
                 });
 
                 $('#framework').multiselect({
-                    nonSelectedText: 'Select Phage',
+                    nonSelectedText: 'Select Enzyme',
                     enableFiltering: true,
                     enableCaseInsensitiveFiltering: true,
                     buttonWidth: '400px'
@@ -373,17 +386,29 @@
                     $("#container").empty();
                     $(".svgDiv").empty();
 
-                    var selectedPhages = $("#framework").val();
-
+                    var selectedEnzymes = $("#framework").val();
+                    var selectedPhage = $("#formPhage").val();
                     var charts = [];
-
-                    //variable for storing the total number of rects needed
-                    var i;
-
-                    var posOfCuts = [];
+                    var basepair = [];
 
                     event.preventDefault();
                     var form_data = $(this).serialize();
+
+                    $.ajax({
+                        async: false,
+                        url: 'basepair.php',
+                        method: "POST",
+                        data: form_data,
+                        success: function (data) {
+                            var result = jQuery.parseJSON(data);
+                            $.each(result, function (index, value) {
+                                basepair.push(value);
+                            })      
+                        }   
+                    });
+
+                    console.log(basepair[0]);
+                            
 
                     $.ajax(
                         {
@@ -396,7 +421,7 @@
                                 });
                                 $('#framework').multiselect('refresh');
 
-                                if (selectedPhages.length != 0) {
+                                if (selectedEnzymes.length != 0) {
                                     var result = jQuery.parseJSON(data);
 
                                     $.each(result, function (index, value) {
@@ -413,16 +438,21 @@
                                             //selecting svg as our element where we will append this object
                                             element: elementDiv,
                                             //phage that is cut
-                                            phage: index,
+                                            enzyme: index,
                                             //cutpoints from database
-                                            cutPoints: value
+                                            cutPoints: value,
+
+                                            phage: selectedPhage,
+
+                                            bpair: basepair[0]
+
                                         }))
                                         // console.log(index + ": " + value);
                                         console.log(index + ": " + value);
                                     });
                                 }
                                 else {
-                                    $('<p>Please select a phage</p>').appendTo('#Container');
+                                    console.log("Please select an enzyme");
                                 }
                             }
                         });
@@ -433,7 +463,7 @@
                     $(window).resize(function () {
 
                         //every time we resize, the value of j becomes i
-                        var j = selectedPhages.length;
+                        var j = selectedEnzymes.length;
 
                         //emptying the svg so that we can redraw the rectangle
                         $("#tab").css("height", $(window).height());

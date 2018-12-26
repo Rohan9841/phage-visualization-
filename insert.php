@@ -5,14 +5,14 @@
 
     if(isset($_POST["formPhage"]) && isset($_POST["formEnzyme"]))
     {
-        $varEnzyme = $_POST["formEnzyme"];
+        $varEnzyme = $_POST["formEnzyme"]; 
         $varPhage = $_POST["formPhage"];
     
-        foreach($varPhage as $value)
+        foreach($varEnzyme as $value)
         {
             $data[$value] = array();
 
-            $query = "SELECT `cutPoints` FROM `cuts` WHERE Enzyme = '$varEnzyme' and Phage = '$value'";
+            $query = "SELECT `cutPoints` FROM `cuts` WHERE Enzyme = '$value' and Phage = '$varPhage'";
             $result = mysqli_query($connect,$query) or die(mysqli_error($connect));
             $a = array();
             while ($row = mysqli_fetch_array($result))

@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -9,14 +9,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
-
-  <script src = "ObjectSvgV2.js"></script>
-
-    <script src="jquery.js"></script>
-    <script src = "jquery-ui/jquery-ui.js"></script>
-    <link rel = "stylesheet" href = "jquery-ui/jquery-ui.css">
-
-        <script src = "d3.min.js"></script>
 
   <style type="text/css">
     .container {
@@ -40,7 +32,7 @@
         <p>
           <label>Select which Phages you want to cut</label>
 
-          <select id="framework" name="formPhage[]" multiple class="form-control" autofocus>
+          <select id="framework" name="framework[]" multiple class="form-control" autofocus>
 
             <option value="Alatin">Alatin</option>
             <option value="Alpacados">Alpacados</option>
@@ -295,8 +287,7 @@
 </html>
 
 <script>
-  $(document).ready(function ()
-{
+  $(document).ready(function () {
     
     $('#framework').multiselect({
       nonSelectedText: 'Select Phage',
@@ -305,40 +296,13 @@
       buttonWidth: '400px'
     });
 
-    $('#framework_form').on('submit', function(event)
-    {
-        var selectedPhages = $("#framework").val();
-        console.log(selectedPhages);
-
-        event.preventDefault();
-        var form_data = $(this).serialize();
+    $('#framework_form').on('submit', function (event) {
+  
+          $('#framework option:selected').each(function () {
+            $(this).prop('selected', false);
+          });
+          $('#framework').multiselect('refresh');
         
-        $.ajax(
-        {
-            url:"insert.php",
-            method:"POST",
-            data:form_data,
-            success:function(data)
-            {
-                $('#framework option:selected').each(function(){
-                $(this).prop('selected', false);
-                });
-                $('#framework').multiselect('refresh');
-
-                if(selectedPhages.length != 0)
-                {
-                    var result = jQuery.parseJSON(data);
-                    $.each(result, function(index, value) {
-                        console.log(index+": "+value);
-                        
-
-                    });
-                }
-                else{
-                    console.log("Please select");
-                }
-            }
-         });
+      });
     });
-});
 </script>

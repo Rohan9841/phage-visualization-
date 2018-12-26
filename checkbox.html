@@ -1,0 +1,173 @@
+<html>
+
+<head>
+    <title>checkbox</title>
+    <style type="text/css">
+        .multiselect {
+            width: 200px;
+        }
+
+        .selectBox {
+            position: relative;
+        }
+
+        .selectBox select {
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .overSelect {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        #checkboxes {
+            display: none;
+            border: 1px #dadada solid;
+        }
+
+        #checkboxes label {
+            display: block;
+        }
+
+        #checkboxes label:hover {
+            background-color: #1e90ff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form>
+        <div class="multiselect">
+            <div class="selectBox" onclick="showCheckboxes()">
+                <select>
+                    <option>Phages</option>
+                </select>
+                <div class="overSelect"></div>
+            </div>
+            <div id="checkboxes">
+
+                <label for="Alatin"><input type="checkbox" id="Alatin" />Alatin</label>
+
+                <label for="Alpacados"><input type="checkbox" id="Alpacados" />Alpacados</label>
+
+                <label for="AngryOrchard"><input type="checkbox" id="AngryOrchard" />AngryOrchard</label>
+
+                <label for="AppleCloud"><input type="checkbox" id="AppleCloud" />AppleCloud</label>
+
+                <label for="Belenaria"><input type="checkbox" id="Belenaria" />Belenaria</label>
+
+                <label for="BobbyDazzler"><input type="checkbox" id="BobbyDazzler" />BobbyDazzler</label>
+
+                <label for="Bonanza"><input type="checkbox" id="Bonanza" />Bonanza</label>
+
+                <label for="Bradshaw"><input type="checkbox" id="Bradshaw" />Bradshaw</label>
+
+                <label for="Bryce"><input type="checkbox" id="Bryce" />Bryce</label>
+
+                <label for="ChewyVIII"><input type="checkbox" id="ChewyVIII" />ChewyVIII</label>
+
+                <label for="CosmicSans"><input type="checkbox" id="CosmicSans" />CosmicSans</label>
+
+                <label for="Dinger"><input type="checkbox" id="Dinger" />Dinger</label>
+
+                <label for="DocB7"><input type="checkbox" id="DocB7" />DocB7</label>
+
+                <label for="E3"><input type="checkbox" id="E3" />E3</label>
+
+                <label for="Erik"><input type="checkbox" id="Erik" />Erik</label>
+
+                <label for="Espica"><input type="checkbox" id="Espica" />Espica</label>
+
+                <label for="Finch"><input type="checkbox" id="Finch" />Finch</label>
+
+                <label for="Gollum"><input type="checkbox" id="Gollum" />Gollum</label>
+
+                <label for="Grayson"><input type="checkbox" id="Grayson" />Grayson</label>
+
+                <label for="Harlequin"><input type="checkbox" id="Harlequin" />Harlequin</label>
+
+                <label for="Hiro"><input type="checkbox" id="Hiro" />Hiro</label>
+
+                <label for="Jace"><input type="checkbox" id="Jace" />Jace</label>
+
+                <label for="Jester"><input type="checkbox" id="Jester" />Jester</label>
+
+                <label for="Krishelle"><input type="checkbox" id="Krishelle" />Krishelle</label>
+
+                <label for="Lillie"><input type="checkbox" id="Lillie" />Lillie</label>
+
+                <label for="Mahdia"><input type="checkbox" id="Mahdia" />Mahdia</label>
+
+                <label for="Naiad"><input type="checkbox" id="Naiad" />Naiad</label>
+
+                <label for="Nancinator"><input type="checkbox" id="Nancinator" />Nancinator</label>
+
+                <label for="Natosaleda"><input type="checkbox" id="Natosaleda" />Natosaleda</label>
+
+                <label for="Partridge"><input type="checkbox" id="Partridge" />Partridge</label>
+
+                <label for="Pepy6"><input type="checkbox" id="Pepy6" />Pepy6</label>
+
+                <label for="Peregrin"><input type="checkbox" id="Peregrin" />Peregrin</label>
+
+                <label for="Phrankenstein"><input type="checkbox" id="Phrankenstein" />Phrankenstein</label>
+
+                <label for="Pine5"><input type="checkbox" id="Pine5" />Pine5</label>
+
+                <label for="Poco6"><input type="checkbox" id="Poco6" />Poco6</label>
+
+                <label for="Rasputin"><input type="checkbox" id="Rasputin" />Rasputin</label>
+
+                <label for="RER2"><input type="checkbox" id="RER2" />RER2</label>
+
+                <label for="RexFury"><input type="checkbox" id="RexFury" />RexFury</label>
+
+                <label for="RGL3"><input type="checkbox" id="RGL3" />RGL3</label>
+
+                <label for="Rhodalysa"><input type="checkbox" id="Rhodalysa" />Rhodalysa</label>
+
+                <label for="StCroix"><input type="checkbox" id="StCroix" />StCroix</label>
+
+                <label for="Swann"><input type="checkbox" id="Swann" />Swann</label>
+
+                <label for="Takoda"><input type="checkbox" id="Takoda" />Takoda</label>
+
+                <label for="Trina"><input type="checkbox" id="Trina" />Trina</label>
+
+                <label for="TWAMP"><input type="checkbox" id="TWAMP" />TWAMP</label>
+
+                <label for="UhSalsa"><input type="checkbox" id="UhSalsa" />UhSalsa</label>
+
+                <label for="Weasels2"><input type="checkbox" id="Weasels2" />Weasels2</label>
+
+                <label for="Yogi"><input type="checkbox" id="Yogi" />Yogi</label>
+
+                <label for="Yoncess"><input type="checkbox" id="Yoncess" />Yoncess</label>
+
+            </div>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        var expanded = false;
+
+        function showCheckboxes() {
+            var checkboxes = document.getElementById("checkboxes");
+            if (!expanded) {
+                checkboxes.style.display = "block";
+                expanded = true;
+            } else {
+                checkboxes.style.display = "none";
+                expanded = false;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

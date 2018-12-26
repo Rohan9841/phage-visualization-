@@ -9,7 +9,8 @@ $link = mysqli_connect("localhost","Rohan","","phage");
 
 	$result = mysqli_query($link,$query);
 	
-	//empty array
+    //empty array
+    
 	$a = array();
 
 	while ($row = mysqli_fetch_array($result))
@@ -108,7 +109,6 @@ function basePair($varPhage)
 		<!-- adding c3 and d3 for chart -->
 		
 		<link href="c3-0.6.7/c3.css" rel="stylesheet">
-		<script src="d3.v5.min.js" charset="utf-8"></script>
 		<script src="c3-0.6.7/c3.min.js"></script>
 
 
@@ -138,7 +138,7 @@ function basePair($varPhage)
 
                     <div id="dropDownPhage">
 						
-                        <select class="phageList" name = "formPhage" autofocus>
+                        <select class="phageList" name = "formPhage" multiple class = "form-control">
 
                             <option value="Alatin">Alatin</option>
                             <option value="Alpacados">Alpacados</option>

@@ -15,15 +15,32 @@
         <style type = "text/css">
 
             #container{
-                background-color:none;
+                background-color:bisque;
                 margin-right: 25px;
                 margin-left: 0px;
             }
 
-            div{
-            
+            svg{
+                position: relative;
+                border: 1px black solid;
+                background-color: red;
             }
 
+            .cir:hover{
+                fill: red;
+                box-shadow: 0px 0px 0px 10px black;
+            }
+            
+            .cir {
+                border: solid 5px #FC5185;
+            }
+
+            .svgDiv{
+                background-color: blue;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
             
         </style>
 
@@ -52,30 +69,38 @@
             
             //variable for storing the total number of rects needed
             var i;
-
+            var dataset = [2,45,66,778,8888];
             //looping through the number of i and creating new Chart object
-            for(i = 0; i<50; i++)
+            for(i = 0; i<25; i++)
             {
+                var elementDiv = document.createElement("div");
+                elementDiv.style.width = $("#container").width();
+                elementDiv.style.height = "200px";
+                elementDiv.classList.add("svgDiv");
+
+                document.getElementById('container').appendChild(elementDiv);
                 //storing all our object in chart array
                  charts.push(new Chart({
                 //selecting svg as our element where we will append this object
-                element: document.querySelector('#container')
+                element: elementDiv,
+                cutPoints: dataset
             }))
+
             }
 
             //while window scrolls, 
-            $(window).scroll(function(){
-                    //storing our div height
-                    var divHeight = $("#container").height();
+            // $(window).scroll(function(){
+            //         //storing our div height
+            //         var divHeight = $("#container").height();
 
-                    //Until the div height is less than the total height of our svg
-                    while(divHeight < i * 120 )
-                    {
-                        //increase the height of div
-                        divHeight = divHeight + (1/100)*divHeight;
-                        $("#container").css("height",divHeight);
-                    }
-                });
+            //         //Until the div height is less than the total height of our svg
+            //         while(divHeight < i * 120 )
+            //         {
+            //             //increase the height of div
+            //             divHeight = divHeight + (1/100)*divHeight;
+            //             $("#container").css("height",divHeight);
+            //         }
+            //     });
 
             //if the window resizes
             $(window).resize(function(){
